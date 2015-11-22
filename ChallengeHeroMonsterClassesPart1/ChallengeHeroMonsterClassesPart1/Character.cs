@@ -10,12 +10,12 @@ namespace ChallengeHeroMonsterClassesPart1
         public string Name { get; set; }
         public int Health { get; set; }
         public int DamageMaximum { get; set; }
-        public int AttackBonus { get; set; }
-        private Random random = new Random();
+        public bool AttackBonus { get; set; }
+        
 
-        public int Attack()
+        public int Attack(Dice die)
         {
-            return random.Next(1, DamageMaximum) + AttackBonus;
+            return die.Roll();
         }
         public int Defend(int damage)
         {
