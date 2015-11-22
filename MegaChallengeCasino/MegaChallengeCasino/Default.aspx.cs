@@ -10,192 +10,119 @@ namespace MegaChallengeCasino
     public partial class Default : System.Web.UI.Page
     {
         Random random = new Random();
-        int numberOfImages = 12;
-        int[] reelsInt;
-        double money = 100;
-
-
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!Page.IsPostBack)
+            if(!Page.IsPostBack)
             {
-                reelsInt = new int[3]; // initialize reels
-                ViewState.Add("money", money);  
-                ViewState.Add("reelsInt", reelsInt);
-                pullLever();  //Generate Reel images
-                moneyLabel.Text = string.Format("Player's Money: {0:C}", money);             //display starting values
+                string[] reels = spinAllReels();
+                ViewState.Add("Money", 100);
+                displayMoney();
             }
         }
 
-        protected void goButton_Click(object sender, EventArgs e)
+        protected void leverButton_Click(object sender, EventArgs e)
         {
-            money = (double)ViewState["money"];
-            reelsInt = (int[])ViewState["reelsInt"];
-            double bet = placeBet();
-            calculateWin(bet);
+            double bet = 0;
+            if (validateBet(out bet)) 
+                pullLever(bet);
+            else            
+                resultLabel.Text = "Please enter a positive numeric value that is less than or equal to your current money.";
             displayMoney();
         }
 
-        private double placeBet ()
+        private bool validateBet(out double bet)
         {
-            double bet = 0;
-            if (tryTakeBet(out bet) && validateBet(bet) && validateMoney(money, bet))
-            {
-                pullLever();     //Generate Reel images
-                updateMoney(-bet);    //subract bet from money
-                resultLabel.Text = "";
-            }
-            return bet;
-        }
-        private void calculateWin(double bet)
-        {
-            double multiplier = getMultiplier();
-            if (multiplier == 0)
-                resultLabel.Text = String.Format("Sorry, you lost {0:C}. Better luck next time.", bet);
-            else
-            {
-                updateMoney(bet * multiplier);
-                resultLabel.Text = string.Format("You bet {0:C} and won {1:C}!", bet, bet * multiplier);
-            }
-        }
-
-        // generates the images for the three reels in the slot machine
-        private void pullLever()
-        {
-            generateRandomReelInts(reelsInt);
-            reelImage1.ImageUrl = getReelImage(reelsInt[0]);
-            reelImage2.ImageUrl = getReelImage(reelsInt[1]);
-            reelImage3.ImageUrl = getReelImage(reelsInt[2]);
-        }
-
-        //Test method
-        private void test_pullLever(int reel1, int reel2, int reel3)
-        {
-            test_generateRandomReelInts(reelsInt, reel1, reel2, reel3);
-            reelImage1.ImageUrl = getReelImage(reelsInt[0]);
-            reelImage2.ImageUrl = getReelImage(reelsInt[1]);
-            reelImage3.ImageUrl = getReelImage(reelsInt[2]);
-        }
-
-        // Test Method
-        private int[] test_generateRandomReelInts(int[] reelsInt, int reel1, int reel2, int reel3)
-        {
-            reelsInt[0] = reel1;
-            reelsInt[1] = reel2;
-            reelsInt[2] = reel3;
-            return reelsInt;
-        }
-
-        
-        private int[] generateRandomReelInts(int[] reelsInt)
-        {
-            for (int i = 0; i < reelsInt.Length; i++)
-            {
-                reelsInt[i] = generateReelInt();
-            }
-            return reelsInt;
-        }
-
-        // generates random image index
-        private int generateReelInt ()
-        {
-            return random.Next(1, numberOfImages);
-        }
-
-        // returns string to be used in imageURL
-        private string getReelImage(int imageNumber)
-        {
-            return "..\\Images\\" + getImage(imageNumber);
-        }
-
-        // gets image name associated to number
-        private string getImage(int imageNumber)
-        {
-            if (imageNumber == 1) return "Bar.png";
-            else if (imageNumber == 2) return "Bell.png";
-            else if (imageNumber == 3) return "Cherry.png";
-            else if (imageNumber == 4) return "Clover.png";
-            else if (imageNumber == 5) return "Diamond.png";
-            else if (imageNumber == 6) return "HorseShoe.png";
-            else if (imageNumber == 7) return "Lemon.png";
-            else if (imageNumber == 8) return "Orange.png";
-            else if (imageNumber == 9) return "Plum.png";
-            else if (imageNumber == 10) return "Seven.png";
-            else if (imageNumber == 11) return "Strawberry.png";
-            else if (imageNumber == 12) return "Watermelon.png";
-            return "Not Found";
-        }
-
-        // updates the the players money and stores it back in ViewState
-        private void updateMoney(double amount)
-        {
-            money = (double)ViewState["money"];
-            money += amount;
-            ViewState["money"] = money;
-        }
-
-        // validates money to make sure player can still play
-        private bool validateMoney (double money, double bet)
-        {
-            if (money - bet < 0)
-            {
-                resultLabel.Text = "You don't have that much money!";
-                return false;
-            }
-            else
+            if (double.TryParse(betTextBox.Text, out bet) && bet > 0 && bet <= double.Parse(ViewState["Money"].ToString()))
                 return true;
+            else
+                return false;
         }
 
-        // Validates to make sure that the bet is a positive number
-        private bool validateBet(double bet)
+        private void pullLever (double bet)
+        {            
+            string[] reels = spinAllReels();            
+            displayResult(reels, bet);
+        }
+
+        private void displayResult(string[] reels, double bet)
         {
-            if (bet <= 0)
-            {
-                resultLabel.Text = "Please enter a positive value for your bet.";
-                return false;
-            }
+            double winnings = determineWinnings(reels, bet);
+            if (winnings > 0)
+                resultLabel.Text = String.Format("You bet {0:C} and won {1:C}", bet, winnings);
             else
+                resultLabel.Text = String.Format("You lost {0:C}. Better luck next time!", bet);
+            adjustMoney(bet, winnings);
+        }
+
+        private void adjustMoney(double bet, double winnings)
+        {
+            double money = double.Parse(ViewState["Money"].ToString());
+            money -= bet;
+            money += winnings;
+            ViewState["Money"] = money;
+        }
+
+        private double determineWinnings(string[] reels, double bet)
+        {
+            return bet * determineMultiplier(reels);
+        }
+
+        private double determineMultiplier(string[] reels)
+        {
+            int cherryCount = cherriesCount(reels); ;
+            if (isBar(reels)) return 0;
+            else if (isJackpot(reels)) return 100;
+            else if (cherryCount > 0) return cherriesCount(reels) + 1; 
+            return 0;
+        }
+
+        private bool isBar(string[] reels)
+        {
+            if (reels[0] == "Bar" || reels[1] == "Bar" || reels[2] == "Bar")
                 return true;
-        }
-
-        // returns true if was able to parse textbox.text and get a bet. Sets output parameter to value in betTextbox.Text
-        private bool tryTakeBet(out double bet)
-        {
-            if(!double.TryParse(betTextBox.Text, out bet))
-            {
-                resultLabel.Text = "Please enter a valid number.";
-                return false;
-            }
-            return true;
-        }
-
-        // gets win multiplier from reel results
-        private double getMultiplier ()
-        {
-            int cherries = countCherries();
-            if (reelsInt[0] == 1 || reelsInt[1] == 1 || reelsInt[2] == 1) return 0.0;
-            else if (reelsInt[0] == 10 && reelsInt[1] == 10 && reelsInt[2] == 10) return 100.0;
-            else if (cherries == 0) return 0;
             else
-                return cherries + 1;
+                return false;
         }
 
-        // counts the number of cherries on the reels
-        private int countCherries ()
+        private bool isJackpot(string[] reels)
         {
-            int count = 0;
-            for (int i = 0; i < reelsInt.Length; i++)
-            {
-                if (reelsInt[i] == 3) count++;
-            }
-            return count;
+            if (reels[0] == "Seven" && reels[1] == "Seven" && reels[2] == "Seven")
+                return true;
+            else
+                return false;
         }
 
-        //updates Players money label
+        private int cherriesCount(string[] reels)
+        {
+            int cherryCount = 0;
+            for (int i = 0; i < reels.Length; i++)
+            {
+                if (reels[i] == "Cherry")
+                    cherryCount++;
+            }           
+            return cherryCount;
+        }
+
+        private string[] spinAllReels()
+        {
+            string[] reels = new string[] { spinReel(), spinReel(), spinReel() };
+            reelImage1.ImageUrl = "/Images/" + reels[0] + ".png";
+            reelImage2.ImageUrl = "/Images/" + reels[1] + ".png";
+            reelImage3.ImageUrl = "/Images/" + reels[2] + ".png";
+            return reels;
+        }
+
+        private string spinReel()
+        {
+            string[] image = new string[] { "Bar", "Bell", "Cherry", "Clover", "Diamond", "HorseShoe", "Lemon",
+                "Orange", "Plum", "Seven", "Strawberry", "Watermelon" };
+            return image[random.Next(11)];
+        }
+
         private void displayMoney()
         {
-            moneyLabel.Text = string.Format("Player's Money: {0:C}", (double)ViewState["money"]);
+            moneyLabel.Text = String.Format("Player's Money: {0:C}", ViewState["Money"]);
         }
     }
 }

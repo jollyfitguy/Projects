@@ -19,7 +19,7 @@
         <asp:TextBox ID="betTextBox" runat="server"></asp:TextBox>
         <br />
         <br />
-        <asp:Button ID="goButton" runat="server" OnClick="goButton_Click" Text="Pull the Lever!" />
+        <asp:Button ID="leverButton" runat="server" OnClick="leverButton_Click" Text="Pull the Lever!" />
         <br />
         <br />
         <asp:Label ID="resultLabel" runat="server"></asp:Label>
