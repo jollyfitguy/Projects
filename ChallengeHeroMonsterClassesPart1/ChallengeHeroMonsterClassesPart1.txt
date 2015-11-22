@@ -1,7 +1,7 @@
 REQUIREMENTS
 =============
 
-1. Name the project: ChallengeHeroMonsterClassesPart1
+Done 1. Name the project: ChallengeHeroMonsterClassesPart1
 
 2. Create a Character class
 It should have properties:
