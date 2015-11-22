@@ -32,27 +32,32 @@ namespace MegaChallengeCasino
         {
             money = (double)ViewState["money"];
             reelsInt = (int[])ViewState["reelsInt"];
-            //take bet
+            double bet = placeBet();
+            calculateWin(bet);
+            displayMoney();
+        }
+
+        private double placeBet ()
+        {
             double bet = 0;
-            if (tryTakeBet(out bet) && validateBet(bet) && validateMoney(money, bet)) 
+            if (tryTakeBet(out bet) && validateBet(bet) && validateMoney(money, bet))
             {
-                //Generate Reel images
-                pullLever();
-                //subract bet from money
-                updateMoney(-bet);
+                pullLever();     //Generate Reel images
+                updateMoney(-bet);    //subract bet from money
                 resultLabel.Text = "";
             }
-
+            return bet;
+        }
+        private void calculateWin(double bet)
+        {
             double multiplier = getMultiplier();
-            if (multiplier == 0)  
+            if (multiplier == 0)
                 resultLabel.Text = String.Format("Sorry, you lost {0:C}. Better luck next time.", bet);
             else
             {
                 updateMoney(bet * multiplier);
                 resultLabel.Text = string.Format("You bet {0:C} and won {1:C}!", bet, bet * multiplier);
             }
-
-            displayMoney();
         }
 
         // generates the images for the three reels in the slot machine
