@@ -15,37 +15,38 @@ namespace ChallengeHeroMonsterClassesPart1
         {
 
             Character hero = new Character();
-            Dice heroDice = new Dice();
+            Dice dice = new Dice();
 
             hero.Name = "Hercules";
             hero.Health = 100;
             hero.DamageMaximum = 10;
-            hero.AttackBonus = false;
-            heroDice.Sides = hero.DamageMaximum;
+            hero.AttackBonus = true;
+            //heroDice.Sides = hero.DamageMaximum;
 
             Character monster = new Character();
-            Dice monsterDice = new Dice();
+            
 
             monster.Name = "Hydra";
             monster.Health = 75;
             monster.DamageMaximum = 15;
-            monster.AttackBonus = true;
-            monsterDice.Sides = monster.DamageMaximum;
+            monster.AttackBonus = false;
+            //monsterDice.Sides = monster.DamageMaximum;
 
             string battle = "";
             if (hero.AttackBonus && !monster.AttackBonus)
             {
-                battle += "Bonus Hero Attack! " + performAttack(hero, heroDice, monster) + "<br/><hr>";
+                battle += "Bonus Hero Attack! " + performAttack(hero, dice, monster) + "<br/><hr>";
             }
             else if (monster.AttackBonus && !hero.AttackBonus)
             {
-                battle += "Surprise attack! " + performAttack(monster, monsterDice, hero) + "<br/><hr>";
+                battle += "Surprise attack! " + performAttack(monster, dice, hero) + "<br/><hr>";
             }
 
             while (hero.Health > 0 && monster.Health > 0)
             {
-                battle += performAttack(hero, heroDice, monster) + "<br/>";
-                battle += performAttack(monster, monsterDice, hero) + "<br/>";
+                battle += performAttack(monster, dice, hero) + "<br/>";
+                battle += performAttack(hero, dice, monster) + "<br/>";
+                
                 battle += "<hr>";
             }
 
@@ -69,6 +70,10 @@ namespace ChallengeHeroMonsterClassesPart1
         private void displayResults(Character opponent1, Character opponent2)
         {
             string winner, loser;
+            if (opponent1.Health <= 0 && opponent2.Health <= 0)
+            {
+                resultLabel.Text += string.Format("{0} and {1} both die!", opponent1.Name, opponent2.Name);
+            }
             if (opponent1.Health <= 0)
             {
                 winner = opponent2.Name;
@@ -82,9 +87,9 @@ namespace ChallengeHeroMonsterClassesPart1
             resultLabel.Text += string.Format("{0} defeated {1}!<br/>", winner, loser);
         }
 
-        private string performAttack(Character attacker, Dice attackerDice, Character defender)
+        private string performAttack(Character attacker, Dice dice, Character defender)
         {
-            int attack = attacker.Attack(attackerDice);
+            int attack = attacker.Attack(dice);
             defender.Defend(attack);
             return String.Format("{0} attacks {1} and deals {2} damage!", attacker.Name, defender.Name, attack);            
         }

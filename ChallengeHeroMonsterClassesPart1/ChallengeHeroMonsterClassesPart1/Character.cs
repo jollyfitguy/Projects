@@ -15,6 +15,7 @@ namespace ChallengeHeroMonsterClassesPart1
 
         public int Attack(Dice die)
         {
+            die.Sides = this.DamageMaximum;
             return die.Roll();
         }
         public int Defend(int damage)
