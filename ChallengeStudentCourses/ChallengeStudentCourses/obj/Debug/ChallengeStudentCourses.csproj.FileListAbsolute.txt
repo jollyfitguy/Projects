@@ -1,0 +1,6 @@
+F:\Programming\Projects\ChallengeStudentCourses\ChallengeStudentCourses\bin\ChallengeStudentCourses.dll.config
+F:\Programming\Projects\ChallengeStudentCourses\ChallengeStudentCourses\bin\ChallengeStudentCourses.dll
+F:\Programming\Projects\ChallengeStudentCourses\ChallengeStudentCourses\bin\ChallengeStudentCourses.pdb
+F:\Programming\Projects\ChallengeStudentCourses\ChallengeStudentCourses\obj\Debug\ChallengeStudentCourses.csprojResolveAssemblyReference.cache
+F:\Programming\Projects\ChallengeStudentCourses\ChallengeStudentCourses\obj\Debug\ChallengeStudentCourses.dll
+F:\Programming\Projects\ChallengeStudentCourses\ChallengeStudentCourses\obj\Debug\ChallengeStudentCourses.pdb
