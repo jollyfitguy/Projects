@@ -20,8 +20,8 @@ namespace Darts
 
         public void Throw()
         {
-            Score = _random.Next(0, 20);
-            _ring = _random.Next(1, 20);
+            Score = _random.Next(0, 21);
+            _ring = _random.Next(1, 21);
             if (Score == 0)
                 determineRingMultiplier();
             else
