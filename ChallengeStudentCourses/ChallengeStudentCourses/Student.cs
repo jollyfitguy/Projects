@@ -10,6 +10,6 @@ namespace ChallengeStudentCourses
         public int StudentId { get; set; }
         public string Name { get; set; }
         public List<Course> Courses { get; set; }
-        public List<Grade> Grades { get; set; }
+        //public List<Grade> Grades { get; set; }
     }
 }

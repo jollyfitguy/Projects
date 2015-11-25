@@ -10,12 +10,12 @@ namespace ChallengeStudentCourses
 {
     public partial class Default : System.Web.UI.Page
     {
-        Random random;
+        Random random = new Random();
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                random = new Random();
+                //random = new Random();
             }
 
         }
@@ -136,82 +136,116 @@ namespace ChallengeStudentCourses
              * print out each Course they are enrolled in and their grade.
              */
 
+            //Dictionary<int, Student> students = new Dictionary<int, Student>
+            //{
+            //    {
+            //        1, new Student
+            //        {
+            //            Name = "Benson Price",
+            //            StudentId = 1,
+            //            Courses = new List<Course>
+            //            {
+            //                new Course { Name = "Computer Science", CourseId = 101 },
+            //                new Course { Name = "Calculus", CourseId = 220 }
+            //            },
+            //            Grades = new List<Grade>
+            //            {
+            //                new Grade { StudentId = 1, CourseId = 101, PercentageScore = random.Next(55,101) },
+            //                new Grade { StudentId = 1, CourseId = 220, PercentageScore = random.Next(55,101) }
+            //            }
+            //        }
+            //    },
+            //    {
+            //        2, new Student
+            //        {
+            //            Name = "Ryan Dockstader",
+            //            StudentId = 2,
+            //            Courses = new List<Course>
+            //            {
+            //                new Course { Name = "Computer Science", CourseId = 101 },
+            //                new Course { Name = "English", CourseId = 151 }
+            //            },
+            //            Grades = new List<Grade>
+            //            {
+            //                new Grade {StudentId = 2, CourseId = 101, PercentageScore = random.Next(55,101) },
+            //                new Grade {StudentId = 2, CourseId = 151, PercentageScore = random.Next(55,101) }
+            //            }
+            //        }
+            //    },
+            //    {
+            //        3, new Student
+            //        {
+            //            Name = "Jared Parkinson",
+            //            StudentId = 3,
+            //            Courses = new List<Course>
+            //            {
+            //                new Course { Name = "Computer Science", CourseId = 101 },
+            //                new Course { Name = "Calculus", CourseId = 220 }
+            //            },
+            //            Grades = new List<Grade>
+            //            {
+            //                new Grade {StudentId = 3, CourseId = 101, PercentageScore = random.Next(55,101) },
+            //                new Grade {StudentId = 3, CourseId = 220, PercentageScore = random.Next(55,101) }
+            //            }
+            //        }
+            //    }
+            //};
+
+
+            //StringBuilder sb = new StringBuilder();
+
+            //sb.Append("Grade List<br/>");
+
+            //for (int i = 0; i < students.Count; i++)
+            //{
+            //    sb.Append(String.Format("StudentID:{0} - {1}<br/>Taking<br/>", students.ElementAt(i).Value.Name, students.ElementAt(i).Value.StudentId));
+            //    foreach (Course course in students.ElementAt(i).Value.Courses)
+            //    {
+            //        sb.Append(string.Format("&nbsp; ID:{0} - {1} ", course.CourseId, course.Name));
+            //        foreach(Grade grade in students.ElementAt(i).Value.Grades)
+            //        {
+            //            if(grade.CourseId == course.CourseId)
+            //            {
+            //                sb.Append(string.Format("Score: {0}<br/>", grade.PercentageScore));
+            //            }
+            //        }
+            //    }
+            //    sb.Append("<br/>");
+            //}
+
+
             Dictionary<int, Student> students = new Dictionary<int, Student>
             {
-                {
-                    1, new Student
-                    {
-                        Name = "Benson Price",
-                        StudentId = 1,
-                        Courses = new List<Course>
-                        {
-                            new Course { Name = "Computer Science", CourseId = 101 },
-                            new Course { Name = "Calculus", CourseId = 220 }
-                        },
-                        Grades = new List<Grade>
-                        {
-                            new Grade { StudentId = 1, CourseId = 101, PercentageScore = random.Next(55,101) },
-                            new Grade { StudentId = 1, CourseId = 220, PercentageScore = random.Next(55,101) }
-                        }
-                    }
-                },
-                {
-                    2, new Student
-                    {
-                        Name = "Ryan Dockstader",
-                        StudentId = 2,
-                        Courses = new List<Course>
-                        {
-                            new Course { Name = "Computer Science", CourseId = 101 },
-                            new Course { Name = "English", CourseId = 151 }
-                        },
-                        Grades = new List<Grade>
-                        {
-                            new Grade {StudentId = 2, CourseId = 101, PercentageScore = random.Next(55,101) },
-                            new Grade {StudentId = 2, CourseId = 151, PercentageScore = random.Next(55,101) }
-                        }
-                    }
-                },
-                {
-                    3, new Student
-                    {
-                        Name = "Jared Parkinson",
-                        StudentId = 3,
-                        Courses = new List<Course>
-                        {
-                            new Course { Name = "Computer Science", CourseId = 101 },
-                            new Course { Name = "Calculus", CourseId = 220 }
-                        },
-                        Grades = new List<Grade>
-                        {
-                            new Grade {StudentId = 3, CourseId = 101, PercentageScore = random.Next(55,101) },
-                            new Grade {StudentId = 3, CourseId = 220, PercentageScore = random.Next(55,101) }
-                        }
-                    }
-                }
+                {1, new Student { Name = "Benson Price", StudentId = 1, Courses = new List<Course> {new Course { Name = "Computer Science", CourseId = 101 }, new Course { Name = "Calculus", CourseId = 220 } } } },
+                {2, new Student { Name = "Ryan Dockstader", StudentId = 2, Courses = new List<Course> { new Course { Name = "Computer Science", CourseId = 101 }, new Course { Name = "English", CourseId = 151 } } } },
+                {3, new Student { Name = "Jared Parkinson", StudentId = 3, Courses = new List<Course> { new Course { Name = "Computer Science", CourseId = 101 },new Course { Name = "Calculus", CourseId = 220 } } } }
             };
-            
+
+            List<Grade> grades = new List<Grade>();
+
+            for (int i = 0; i < students.Count; i++)
+            {
+                foreach(Course course in students.ElementAt(i).Value.Courses)
+                {
+                    int score = random.Next(55, 101);
+                    grades.Add(new Grade { StudentId = students.ElementAt(i).Value.StudentId, CourseId = course.CourseId, PercentageScore = score });
+                }
+            }
 
             StringBuilder sb = new StringBuilder();
-
-            sb.Append("Grade List<br/>");
 
             for (int i = 0; i < students.Count; i++)
             {
                 sb.Append(String.Format("StudentID:{0} - {1}<br/>Taking<br/>", students.ElementAt(i).Value.Name, students.ElementAt(i).Value.StudentId));
                 foreach (Course course in students.ElementAt(i).Value.Courses)
                 {
-                    sb.Append(string.Format("&nbsp; ID:{0} - {1} ", course.CourseId, course.Name));
-                    foreach(Grade grade in students.ElementAt(i).Value.Grades)
-                    {
-                        if(grade.CourseId == course.CourseId)
-                        {
-                            sb.Append(string.Format("Score: {0}<br/>", grade.PercentageScore));
-                        }
-                    }
+                    sb.Append(string.Format("&nbsp; ID:{0} - {1}", course.CourseId, course.Name));
+                    sb.Append(String.Format(" - Score: {0}<br/>",grades.Find(p => p.StudentId == students.ElementAt(i).Value.StudentId && p.CourseId == course.CourseId).PercentageScore));
                 }
                 sb.Append("<br/>");
             }
+
+            resultLabel.Text = sb.ToString();
 
         }
     }
