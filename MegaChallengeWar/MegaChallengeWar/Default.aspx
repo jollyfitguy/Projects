@@ -10,6 +10,20 @@
     <form id="form1" runat="server">
     <div>
     
+        Play War<br />
+        <br />
+        <asp:Button ID="playButton" runat="server" OnClick="playButton_Click" Text="Play" />
+        <br />
+        <br />
+        <asp:Label ID="resultLabel" runat="server"></asp:Label>
+        <br />
+        <br />
+        <asp:Label ID="winnerLabel" runat="server"></asp:Label>
+        <br />
+        <asp:Label ID="player1ScoreLabel" runat="server" ForeColor="Red"></asp:Label>
+        <br />
+        <asp:Label ID="player2ScoreLabel" runat="server" ForeColor="Blue"></asp:Label>
+    
     </div>
     </form>
 </body>
