@@ -19,7 +19,7 @@ namespace MegaChallengeWar.Source
             Cards.Enqueue(card);
         }
         public Card PlayCard()
-        {
+        {            
             return Cards.Dequeue();
         }
 

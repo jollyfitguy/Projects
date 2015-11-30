@@ -120,12 +120,14 @@ namespace MegaChallengeWar.Source
                 result += String.Format("<b>Round {0}</b><br/>{1}", ++i, PlayRound());
             }
             */
-
+            
             for (int i = 0; i < Rounds; i++)
             {
                 result += String.Format("<b>Round {0}</b><br/>{1}", i + 1, PlayRound());
             }
+            
             return result;
+            
         }
         public string DisplayPlayerCardTotals(Hand player)
         {
